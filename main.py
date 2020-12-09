@@ -1,4 +1,8 @@
 from A1 import a1
+from A2 import a2
+from B1 import b1
+from B2 import b2
+
 
 # ======================================================================================================================
 # Data preprocessing
@@ -16,27 +20,27 @@ acc_A1_test = model_A1.test()    # Test model based on the test set.
 # ======================================================================================================================
 # Task A2
 
-# model_A2 = A2(args...)
-# acc_A2_train = model_A2.train(args...)
-# acc_A2_test = model_A2.test(args...)
+model_A2 = a2()
+acc_A2_train = model_A2.train()
+acc_A2_test = model_A2.test()
 #Clean up memory/GPU etc...
 
 
 # ======================================================================================================================
 # Task B1
 
-# model_B1 = B1(args...)
-# acc_B1_train = model_B1.train(args...)
-# acc_B1_test = model_B1.test(args...)
+model_B1 = b1()
+acc_B1_train = model_B1.train()
+acc_B1_test = model_B1.test()
 #Clean up memory/GPU etc...
 
 
 # ======================================================================================================================
 # Task B2
 
-# model_B2 = B2(args...)
-# acc_B2_train = model_B2.train(args...)
-# acc_B2_test = model_B2.test(args...)
+model_B2 = b2()
+acc_B2_train = model_B2.train()
+acc_B2_test = model_B2.test()
 #Clean up memory/GPU etc...
 
 
