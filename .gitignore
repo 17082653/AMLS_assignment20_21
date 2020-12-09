@@ -3,3 +3,6 @@
 /Datasets/celeba/
 /Datasets/celeba_test/
 .DS_Store
+.idea
+testing.ipynb
+.ipynb_checkpoints
