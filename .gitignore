@@ -1,8 +1,18 @@
+# No need for Desktop Services Store files
+.DS_Store
+# PyCharm settings folder
+.idea
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Jupyter notebook files used for testing from time to time
+.ipynb_checkpoints
+testing.ipynb
+
+# The large image datasets used for model training/validation/testing
 /Datasets/cartoon_set/
 /Datasets/cartoon_set_test/
 /Datasets/celeba/
 /Datasets/celeba_test/
-.DS_Store
-.idea
-testing.ipynb
-.ipynb_checkpoints

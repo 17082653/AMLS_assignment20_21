@@ -1,8 +1,7 @@
-from A1 import a1
-from A2 import a2
-from B1 import b1
-from B2 import b2
-
+from A1.a1 import A1
+from A2.a2 import A2
+from B1.b1 import B1
+from B2.b2 import B2
 
 # ======================================================================================================================
 # Data preprocessing
@@ -11,7 +10,7 @@ from B2 import b2
 # ======================================================================================================================
 # Task A1
 
-model_A1 = a1()                  # Build model object.
+model_A1 = A1()                  # Build model object.
 acc_A1_train = model_A1.train()  # Train model based on the training set (you should fine-tune your model based on validation set.)
 acc_A1_test = model_A1.test()    # Test model based on the test set.
 #Clean up memory/GPU etc...             # Some code to free memory if necessary.
@@ -20,7 +19,7 @@ acc_A1_test = model_A1.test()    # Test model based on the test set.
 # ======================================================================================================================
 # Task A2
 
-model_A2 = a2()
+model_A2 = A2()
 acc_A2_train = model_A2.train()
 acc_A2_test = model_A2.test()
 #Clean up memory/GPU etc...
@@ -29,7 +28,7 @@ acc_A2_test = model_A2.test()
 # ======================================================================================================================
 # Task B1
 
-model_B1 = b1()
+model_B1 = B1()
 acc_B1_train = model_B1.train()
 acc_B1_test = model_B1.test()
 #Clean up memory/GPU etc...
@@ -38,7 +37,7 @@ acc_B1_test = model_B1.test()
 # ======================================================================================================================
 # Task B2
 
-model_B2 = b2()
+model_B2 = B2()
 acc_B2_train = model_B2.train()
 acc_B2_test = model_B2.test()
 #Clean up memory/GPU etc...
@@ -46,7 +45,7 @@ acc_B2_test = model_B2.test()
 
 # ======================================================================================================================
 ## Print out your results with following format:
-print('TA1:{},{};TA2:{},{};TB1:{},{};TB2:{},{};'.format(acc_A1_train, acc_A1_test,
-                                                        acc_A2_train, acc_A2_test,
-                                                        acc_B1_train, acc_B1_test,
-                                                        acc_B2_train, acc_B2_test))
+# print('TA1:{},{};TA2:{},{};TB1:{},{};TB2:{},{};'.format(acc_A1_train, acc_A1_test,
+#                                                         acc_A2_train, acc_A2_test,
+#                                                         acc_B1_train, acc_B1_test,
+#                                                         acc_B2_train, acc_B2_test))
