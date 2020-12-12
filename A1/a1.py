@@ -5,7 +5,7 @@ class A1:
         pass
 
     def train(self):
-        print("training")
+        pass
 
     def test(self):
-        print("testing")
+        pass

@@ -1,11 +1,20 @@
+import os
+
+import numpy as np
+
 from A1.a1 import A1
 from A2.a2 import A2
 from B1.b1 import B1
 from B2.b2 import B2
 
+from Utility import utility as util
+
 # ======================================================================================================================
 # Data preprocessing
+
 #data_train, data_val, data_test = data_preprocessing(args...)
+
+tr_X, tr_Y, te_X, te_Y = util.get_data(util.celeba_set)
 
 # ======================================================================================================================
 # Task A1
