@@ -11,6 +11,9 @@ __pycache__/
 .ipynb_checkpoints
 testing.ipynb
 
+# Python test file
+tests.py
+
 # The large image datasets used for model training/validation/testing
 /Datasets/cartoon_set/
 /Datasets/cartoon_set_test/
