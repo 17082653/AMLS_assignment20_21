@@ -14,20 +14,22 @@ from Utility import utility as util
 # ======================================================================================================================
 # Data preprocessing
 
-#data_train, data_val, data_test = data_preprocessing(args...)
+# data_train, data_val, data_test = data_preprocessing(args...)
+# tr_X, tr_Y, te_X, te_Y = util.get_data(util.celeba_set)
 
-#tr_X, tr_Y, te_X, te_Y = util.get_data(util.celeba_set)
-
-#landmark_features, gender_labels = util.extract_features_labels(util.celeba_set)
-
+# landmark_features, gender_labels = util.extract_features_labels(util.celeba_set)
 # np.save('landmarks.npy', landmark_features)
 # np.save('genders.npy', gender_labels)
 
-# ======================================================================================================================
-# Task A1
+# landmark_features, gender_labels = util.extract_features_labels(util.celeba_test_set)
+# np.save('landmarks_test.npy', landmark_features)
+# np.save('genders_test.npy', gender_labels)
 
 genders = np.load('genders.npy')
 landmarks = np.load('landmarks.npy')
+
+genders_test = np.load('genders_test.npy')
+landmarks_test = np.load('landmarks_test.npy')
 
 tr_X, te_X, tr_Y, te_Y = train_test_split(landmarks, genders, test_size=0.33, random_state=42)
 
@@ -37,12 +39,23 @@ tr_Y = list(tr_Y)
 te_X = te_X.reshape(len(te_X), 68*2)
 te_Y = list(te_Y)
 
+landmarks_test = landmarks_test.reshape(len(landmarks_test), 68*2)
+genders_test = list(genders_test)
+
+
+# ======================================================================================================================
+# Task A1
+
 model_A1 = A1()                  # Build model object.
+
 acc_A1_train = model_A1.train(tr_X, tr_Y, te_X, te_Y)  # Train model based on the training set (you should fine-tune your model based on validation set.)
 
 print(acc_A1_train)
 
-acc_A1_test = model_A1.test()    # Test model based on the test set.
+acc_A1_test = model_A1.test(landmarks_test, genders_test)    # Test model based on the test set.
+
+print(acc_A1_test)
+
 #Clean up memory/GPU etc...             # Some code to free memory if necessary.
 
 

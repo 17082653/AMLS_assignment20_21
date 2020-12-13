@@ -15,8 +15,10 @@ class A1:
 
         return accuracy_score(test_labels, pred)
 
-    def test(self, test_images):
-        pass
+    def test(self, test_images, test_labels):
+        pred = self.classifier.predict(test_images)
+
+        return accuracy_score(test_labels, pred)
 
     # def img_SVM(self, training_images, training_labels, test_images, test_labels):
     #     classifier = svm.SVC(kernel='linear')

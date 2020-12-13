@@ -7,8 +7,13 @@ import dlib
 # PATH TO ALL IMAGES
 global basedir, image_paths, target_size
 basedir = './Datasets'
+
 celeba_set = os.path.join(basedir,'celeba')
 cartoon_set = os.path.join(basedir,'cartoon_set')
+
+celeba_test_set = os.path.join(basedir,'celeba_test')
+cartoon_test_set = os.path.join(basedir,'cartoon_set_test')
+
 labels_filename = 'labels.csv'
 images_dir = 'img'
 
