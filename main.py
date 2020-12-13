@@ -46,12 +46,14 @@ genders_test = list(genders_test)
 # ======================================================================================================================
 # Task A1
 
-model_A1 = A1()                  # Build model object.
+model_A1 = A1(kernel='poly', degree=5)                  # Build model object.
 
+print("Training Model...")
 acc_A1_train = model_A1.train(tr_X, tr_Y, te_X, te_Y)  # Train model based on the training set (you should fine-tune your model based on validation set.)
 
 print(acc_A1_train)
 
+print("Testing Model on celeba_set_test...")
 acc_A1_test = model_A1.test(landmarks_test, genders_test)    # Test model based on the test set.
 
 print(acc_A1_test)
