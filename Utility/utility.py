@@ -4,8 +4,6 @@ from keras.preprocessing import image
 import cv2
 import dlib
 
-import time
-
 # PATH TO ALL IMAGES
 global basedir, image_paths, target_size
 basedir = './Datasets'
@@ -15,7 +13,7 @@ labels_filename = 'labels.csv'
 images_dir = 'img'
 
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 
 
 # how to find frontal human faces in an image using 68 landmarks.
@@ -34,11 +32,12 @@ predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 
 
 def get_data(data_set):
-
     X, y = extract_features_labels(data_set)
-    print(X.shape)
-    print(y.shape)
+
+    # this line gives labels 2 columns, with opposite in second column??
     Y = np.array([y, -(y - 1)]).T
+
+    # Make this normal, not 100 splits
     tr_X = X[:100]
     tr_Y = Y[:100]
     te_X = X[100:]
