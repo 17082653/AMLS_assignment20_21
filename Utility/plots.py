@@ -37,7 +37,7 @@ def plot_validation_curve(model, tr_X, tr_Y, param_name, param_range):
                          test_scores_mean + test_scores_std, alpha=0.2,
                          color="navy", lw=lw)
         plt.legend(loc="best")
-    elif param_name == "degree":
+    else:
         plt.plot(param_range, train_scores_mean, label="Training score",
                      color="darkorange", lw=lw)
         plt.fill_between(param_range, train_scores_mean - train_scores_std,

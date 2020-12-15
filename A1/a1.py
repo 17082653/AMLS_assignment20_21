@@ -7,10 +7,11 @@ from sklearn.model_selection import cross_val_score, validation_curve
 
 class A1:
 
-    def __init__(self, kernel='linear', degree=3):
+    def __init__(self, c=1.0, kernel='linear', degree=3,):
+        self.c = c
         self.kernel = kernel
         self.degree = degree
-        self.classifier = svm.SVC(kernel=self.kernel, degree=self.degree)
+        self.classifier = svm.SVC(C=self.c, kernel=self.kernel, degree=self.degree)
 
     def train(self, training_images, training_labels, test_images, test_labels):
         start = time.time()

@@ -78,11 +78,11 @@ genders_test = list(genders_test)
 # Model Validation Stuff
 
 param_grid = {
-    'C': [1, 5, 10, 50],
-    'kernel' : ('linear', 'poly'),
-    'degree': [1, 2, 3, 4, 5]}
+    'C': [0.5, 1, 10, 15]}
+    #'kernel' : ('linear', 'poly'),
+    #'degree': [1, 2, 3, 4, 5]}
 
-# plots.plot_validation_curve(SVC(kernel='poly'), tr_X, tr_Y, "degree", np.arange(7))
+#plots.plot_validation_curve(SVC(kernel='poly', degree=4), tr_X, tr_Y, "C", [0.001, 0.01, 0.1, 1])
 
 # grid = GridSearchCV(SVC(), param_grid, cv=5)
 # grid.fit(tr_X, tr_Y)
@@ -97,7 +97,9 @@ param_grid = {
     # - plot training score and cross validation score lines for diff hyper parameters
 # select best performing model and give test score
 
-model_A1 = A1('poly', degree=4)                  # Build model object.
+# find best C value... validation curve not work
+model_A1 = A1(c=1, kernel='poly', degree=4)                  # Build model object.
+
 
 print("Training Model...")
 acc_A1_train = model_A1.train(tr_X, tr_Y, te_X, te_Y)  # Train model based on the training set (you should fine-tune your model based on validation set.)
