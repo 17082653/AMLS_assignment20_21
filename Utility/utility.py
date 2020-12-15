@@ -175,3 +175,8 @@ def extract_features_labels(data_set):
 
     return landmark_features, gender_labels
 
+def split_landmark_features(landmark_features):
+    pass
+
+
+

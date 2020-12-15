@@ -1,11 +1,12 @@
 import os
 
-
+import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV, validation_curve
 from sklearn import preprocessing
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.feature_selection import RFECV
 
 
 from A1.a1 import A1
@@ -36,6 +37,46 @@ landmarks = np.load('landmarks.npy')
 genders_test = np.load('genders_test.npy')
 landmarks_test = np.load('landmarks_test.npy')
 
+# ////////////////////////////
+# FEATURE EXTRACTION - GETTING EACH PART OF THE FACE
+feat_ex = landmarks.reshape(len(landmarks), 68*2)
+
+
+faces = {'jaw': [], 'right_eyebrow': [], 'left_eyebrow': [], 'nose': [], 'right_eye': [], 'left_eye': [], 'mouth': []}
+
+for i in range(0, len(feat_ex)):
+    faces['jaw'].append(feat_ex[i][:17*2])
+    faces['right_eyebrow'].append(feat_ex[i][17*2:22*2])
+    faces['left_eyebrow'].append(feat_ex[i][22*2:27*2])
+    faces['nose'].append(feat_ex[i][27*2:36*2])
+    faces['right_eye'].append(feat_ex[i][36*2:42*2])
+    faces['left_eye'].append(feat_ex[i][42*2:48*2])
+    faces['mouth'].append(feat_ex[i][48*2:68*2])
+
+df = pd.DataFrame(data=faces)
+
+forbidden_features = ['nose']
+training_features = [feature for feature in list(faces) if feature not in forbidden_features]
+
+df = df[training_features]
+
+final_data = df.to_numpy()
+
+rows, cols = (len(final_data), 118)
+arr = [[0]*cols]*rows
+
+for i in range(0, len(final_data)):
+    features = np.concatenate(final_data[i], axis=0)
+    arr[i] = features
+
+## TESTING FEATURE EXTRACTION - NO NOSE
+landmarks = np.array(arr)
+
+feat_num = landmarks.shape[1]
+print(feat_num)
+# ////////////////////////////
+
+
 # Splitting data into training and test
 # train/test/val
 train_ratio = 0.80
@@ -54,17 +95,22 @@ print(len(tr_X))
 #print(len(val_X))
 
 # Reshaping the features into 2 dimensions
-tr_X = tr_X.reshape(len(tr_X), 68*2)
+tr_X = tr_X.reshape(len(tr_X), feat_num)
 tr_Y = list(tr_Y)
 
-te_X = te_X.reshape(len(te_X), 68*2)
+te_X = te_X.reshape(len(te_X), feat_num)
 te_Y = list(te_Y)
+
+print(tr_X.shape)
 
 # val_X = te_X.reshape(len(val_X), 68*2)
 # val_Y = list(val_Y)
 
-landmarks_test = landmarks_test.reshape(len(landmarks_test), 68*2)
-genders_test = list(genders_test)
+#print(training_features)
+
+## NO DEALING WITH THE TEST SET FOR NOW
+#landmarks_test = landmarks_test.reshape(len(landmarks_test), feat_num)
+#genders_test = list(genders_test)
 
 # normalizing tr_X and te_X with preprocessing.normalize(tr_X) reduced accuracy across the board
 
@@ -100,7 +146,6 @@ param_grid = {
 # find best C value... validation curve not work
 model_A1 = A1(c=1, kernel='poly', degree=4)                  # Build model object.
 
-
 print("Training Model...")
 acc_A1_train = model_A1.train(tr_X, tr_Y, te_X, te_Y)  # Train model based on the training set (you should fine-tune your model based on validation set.)
 
@@ -111,9 +156,9 @@ cross_validated_training_acc = model_A1.cross_validate(tr_X, tr_Y, 5)
 print(np.mean(cross_validated_training_acc)) # If i use this sklearn cross validation technique, i dont need to split for a validation set
 
 print("Testing Model on celeba_set_test...")
-acc_A1_test = model_A1.test(landmarks_test, genders_test)    # Test model based on the test set.
+#acc_A1_test = model_A1.test(landmarks_test, genders_test)    # Test model based on the test set.
 
-print(acc_A1_test)
+#print(acc_A1_test)
 
 #Clean up memory/GPU etc...             # Some code to free memory if necessary.
 
