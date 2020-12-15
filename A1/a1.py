@@ -1,3 +1,8 @@
+# ======================================================================================================================
+# Task A1 model class. The class A1 essentially acts as a classifier object. The default arguments are that of the
+# chosen final model. Certain functions were used in model selection and are mentioned in the report, however are not
+# ran in 'main.py' in the final submission.
+# ======================================================================================================================
 import matplotlib as plt
 import numpy as np
 import time
@@ -31,14 +36,3 @@ class A1:
         scores = cross_val_score(self.classifier, validation_images, validation_labels, cv=cv_folds)
 
         return scores
-
-    # def img_SVM(self, training_images, training_labels, test_images, test_labels):
-    #     classifier = svm.SVC(kernel='linear')
-    #
-    #     classifier.fit(training_images, training_labels)
-    #
-    #     pred = classifier.predict(test_images)
-    #
-    #     print(pred)
-    #
-    #     print("Accuracy:", accuracy_score(test_labels, pred))

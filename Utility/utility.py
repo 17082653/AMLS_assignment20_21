@@ -1,10 +1,15 @@
+# ======================================================================================================================
+# This file contains utility functions used to extract features/data from the dlib face detector
+# It also contains the global paths to the image dataset directory
+# ======================================================================================================================
 import os
 import numpy as np
 from keras.preprocessing import image
 import cv2
 import dlib
 
-# PATH TO ALL IMAGES
+# PATH TO ALL IMAGES AND PRE-TRAINED FACE DETECTOR
+# ====================================================
 global basedir, image_paths, target_size
 basedir = './Datasets'
 
@@ -19,7 +24,7 @@ images_dir = 'img'
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
-
+# ====================================================
 
 # how to find frontal human faces in an image using 68 landmarks.
 # These are points on the face such as the corners of the mouth, along the eyebrows, on the eyes, and so forth.
@@ -34,7 +39,6 @@ predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 #     C. Sagonas, E. Antonakos, G, Tzimiropoulos, S. Zafeiriou, M. Pantic.
 #     300 faces In-the-wild challenge: Database and results.
 #     Image and Vision Computing (IMAVIS), Special Issue on Facial Landmark Localisation "In-The-Wild". 2016.
-
 
 def get_data(data_set):
     X, y = extract_features_labels(data_set)
@@ -174,9 +178,5 @@ def extract_features_labels(data_set):
     print(txt.format(percent=(len(gender_labels) / len(image_paths)) * 100))
 
     return landmark_features, gender_labels
-
-def split_landmark_features(landmark_features):
-    pass
-
 
 

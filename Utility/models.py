@@ -1,5 +1,5 @@
 # ======================================================================================================================
-# This file was used to run tests on a variety of models to determine the best performing model
+# This file was used to run tests on a variety of models to determine the best performing starting model
 # ======================================================================================================================
 import numpy as np
 
