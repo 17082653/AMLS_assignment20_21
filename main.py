@@ -1,11 +1,28 @@
 import os
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV, validation_curve
 from sklearn import preprocessing
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.feature_selection import SelectKBest, chi2
+
+from sklearn import preprocessing, svm
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, VotingClassifier
+from sklearn.feature_selection import SelectKBest, chi2, RFECV, f_classif
+from sklearn.linear_model import LassoCV, RidgeCV, LogisticRegression,  SGDClassifier
+from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, learning_curve
+from sklearn.metrics import confusion_matrix, accuracy_score,  classification_report
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC, LinearSVC
+from sklearn.tree import DecisionTreeClassifier
+from  warnings import simplefilter
+from sklearn.exceptions import ConvergenceWarning
+simplefilter("ignore", category=ConvergenceWarning)
+
 
 from A1.a1 import A1
 from A2.a2 import A2
@@ -25,13 +42,13 @@ from Utility import plots
 # prep.save_data(util.celeba_set, 'landmarks.npy', 'genders.npy')
 # prep.save_data(util.celeba_test_set, 'landmarks_test.npy', 'genders_test.npy')
 
-landmarks, genders = prep.load_data('landmarks.npy', 'genders.npy')
+original_landmarks, genders = prep.load_data('landmarks.npy', 'genders.npy')
 landmarks_test, genders_test = prep.load_data('landmarks_test.npy', 'genders_test.npy')
 
-landmarks, feat_num = prep.split_and_label_features(landmarks, [])
+landmarks, feat_num = prep.split_and_label_features(original_landmarks, [])
+landmarks_test, __ = prep.split_and_label_features(landmarks_test, [])
 
-# Splitting data into training and test
-# train/test/val
+# Splitting data into train/test/val
 train_ratio = 0.80
 validation_ratio = 0.10
 #test_ratio = 0.10
@@ -42,12 +59,6 @@ tr_X, te_X, tr_Y, te_Y = train_test_split(landmarks, genders, test_size=1-train_
 print(len(tr_X))
 print(tr_X.shape)
 
-# Splitting validation set off off train set
-#val_X, te_X, val_Y, te_Y = train_test_split(te_X, te_Y, test_size=test_ratio/(test_ratio+validation_ratio), shuffle=False)
-
-#print(len(te_X))
-#print(len(val_X))
-
 # Reshaping the features into 2 dimensions based on data length and number of features
 tr_X = tr_X.reshape(len(tr_X), feat_num)
 tr_Y = list(tr_Y)
@@ -55,18 +66,62 @@ tr_Y = list(tr_Y)
 te_X = te_X.reshape(len(te_X), feat_num)
 te_Y = list(te_Y)
 
-print(tr_X.shape)
+#======= PANDAS STYLE =======#
+# Getting dataframe of all images, with 136 columns corresponding to each feature
+X_train = pd.DataFrame(data=tr_X)
+Y_train = pd.DataFrame(data=tr_Y)
 
-# val_X = te_X.reshape(len(val_X), 68*2)
-# val_Y = list(val_Y)
+X_test = pd.DataFrame(data=te_X)
+Y_test = pd.DataFrame(data=te_Y)
 
-#print(training_features)
+celeba_test_set = pd.DataFrame(data=landmarks_test)
+genders_test = pd.DataFrame(data=genders_test)
 
-## NO DEALING WITH THE TEST SET FOR NOW
-#landmarks_test = landmarks_test.reshape(len(landmarks_test), feat_num)
-#genders_test = list(genders_test)
+Y_train = Y_train[0]
+Y_test= Y_test[0]
 
-# normalizing tr_X and te_X with preprocessing.normalize(tr_X) reduced accuracy across the board
+# THIS SCALER REDUCES ACCURACY
+# scaler = preprocessing.MinMaxScaler()
+# X_train = pd.DataFrame(scaler.fit_transform(X_train), columns=X_train.columns)
+# X_test = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns)
+
+#====== To be moved =====
+def rfecv_tool(estimator):
+  # The "accuracy" scoring is proportional to the number of correct
+  # classifications
+  rfecv = RFECV(estimator=estimator, step=1, cv=StratifiedKFold(5),
+                scoring='accuracy')
+  rfecv.fit(X_train, Y_train)
+  print('score', rfecv.score(X_test, Y_test))
+  print("Optimal number of features : %d" % rfecv.n_features_)
+
+  # Plot number of features VS. cross-validation scores
+  plt.figure()
+  plt.xlabel("Number of features selected")
+  plt.ylabel("Cross validation score (nb of correct classifications)")
+  plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
+  plt.show()
+  return rfecv, X_train.columns[rfecv.support_]
+
+# Create the RFE object and compute a cross-validated score.
+lr = LogisticRegression(solver='lbfgs', multi_class='auto')
+lr_rfecv, lr_rfecv_features = rfecv_tool(lr)
+print('selected features', lr_rfecv_features)
+print(models.test_models(X_train[lr_rfecv_features], Y_train, X_test[lr_rfecv_features], Y_test))
+
+
+# fs = SelectKBest(chi2, k='all')
+# fs.fit_transform(X_train, Y_train)
+# scores = pd.Series(fs.scores_, index = X_train.columns)
+# scores = scores.sort_values()
+# print(scores)
+#
+# features = list(scores[scores > 1].keys())
+# print(features)
+
+# apply feature selection
+
+#print(models.test_models(X_train[features], Y_train, X_test[features], Y_test))
 
 # print("Testing models...")
 #
@@ -74,6 +129,10 @@ print(tr_X.shape)
 #
 # print(model_tests['Name'])
 # print(model_tests['Score'])
+
+#print(training_features)
+
+# normalizing tr_X and te_X with preprocessing.normalize(tr_X) reduced accuracy across the board
 
 # Model Validation Stuff
 
@@ -98,10 +157,11 @@ param_grid = {
 # select best performing model and give test score
 
 # find best C value... validation curve not work
-model_A1 = A1(c=1, kernel='poly', degree=4)                  # Build model object.
+model_A1 = A1(c=0.1, kernel='poly', degree=4)                  # Build model object.
 
 print("Training Model...")
-acc_A1_train = model_A1.train(tr_X, tr_Y, te_X, te_Y)  # Train model based on the training set (you should fine-tune your model based on validation set.)
+acc_A1_train = model_A1.train(X_train[lr_rfecv_features], Y_train, X_test[lr_rfecv_features], Y_test)
+#acc_A1_train = model_A1.train(tr_X, tr_Y, te_X, te_Y)  # Train model based on the training set (you should fine-tune your model based on validation set.)
 
 print(acc_A1_train)
 
@@ -110,9 +170,9 @@ cross_validated_training_acc = model_A1.cross_validate(tr_X, tr_Y, 5)
 print(np.mean(cross_validated_training_acc)) # If i use this sklearn cross validation technique, i dont need to split for a validation set
 
 print("Testing Model on celeba_set_test...")
-#acc_A1_test = model_A1.test(landmarks_test, genders_test)    # Test model based on the test set.
+acc_A1_test = model_A1.test(celeba_test_set[lr_rfecv_features], genders_test)    # Test model based on the test set.
 
-#print(acc_A1_test)
+print(acc_A1_test)
 
 #Clean up memory/GPU etc...             # Some code to free memory if necessary.
 

@@ -13,7 +13,7 @@ def load_data(file_x, file_y):
     # Function for loading dataset from npy files
     return np.load(file_x), np.load(file_y)
 
-def split_and_label_features(landmarks, forbidden=[]):
+def split_and_label_features(landmarks, forbidden=[], dataFrameBool=False):
     """
     This function takes all 68 landmarks extracted from dlib facial detector, and splits them into
     specific facial features (eye, mouth, etc.)
@@ -53,6 +53,12 @@ def split_and_label_features(landmarks, forbidden=[]):
     forbidden_features = forbidden
     training_features = [feature for feature in list(faces) if feature not in forbidden_features]
     df = df[training_features]
+
+    # A way to return just the dataframe with column names corresponding to features
+    if dataFrameBool:
+        # currently takes mean of each entry
+        df = df.applymap(np.mean)
+        return df
 
     # Converting back to numpy array
     final_data = df.to_numpy()

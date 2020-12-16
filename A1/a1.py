@@ -7,16 +7,21 @@ import matplotlib as plt
 import numpy as np
 import time
 from sklearn import svm
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score, validation_curve
 
 class A1:
 
-    def __init__(self, c=1.0, kernel='linear', degree=3,):
+    def __init__(self, c=1.0, kernel='linear', degree=3, lr=False):
         self.c = c
         self.kernel = kernel
         self.degree = degree
-        self.classifier = svm.SVC(C=self.c, kernel=self.kernel, degree=self.degree)
+        if lr:
+            self.classifier = LogisticRegression(solver='liblinear', multi_class='auto', max_iter=1000)
+        else:
+            self.classifier = svm.SVC(C=self.c, kernel=self.kernel, degree=self.degree)
+
 
     def train(self, training_images, training_labels, test_images, test_labels):
         start = time.time()
