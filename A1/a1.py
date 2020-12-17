@@ -18,6 +18,7 @@ class A1:
         self.kernel = kernel
         self.degree = degree
         if lr:
+            # best params: {'C': 0.1, 'penalty': 'l2', 'solver': 'newton-cg'}
             self.classifier = LogisticRegression(penalty='l2', solver='newton-cg', C=0.1, max_iter=1000)
         else:
             self.classifier = svm.SVC(C=self.c, kernel=self.kernel, degree=self.degree)

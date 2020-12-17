@@ -24,7 +24,6 @@ from  warnings import simplefilter
 from sklearn.exceptions import ConvergenceWarning
 simplefilter("ignore", category=ConvergenceWarning)
 
-
 from A1.a1 import A1
 from A2.a2 import A2
 from B1.b1 import B1
@@ -63,14 +62,6 @@ X_2test, Y_2test = prep.convert_to_dataframes(te2_X, te2_Y)
 
 # ======================================================================================================================
 # Task A1
-# test all basic models on data with all features to get preliminary accuracies
-# pick best performing model
-# do feature selection - CV on number of features? # need to shuffle training data
-# hyper paramter tuning - tune parameters in model with CV
-    # - plot training score and cross validation score lines for diff hyper parameters
-# select best performing model and give test score
-
-# find best C value... validation curve not work
 
 #model_A1 = A1(c=0.1, kernel='poly', degree=4)                  # Build model object.
 model_A1 = A1(lr=True)
@@ -87,13 +78,11 @@ param_grid_lr = {
 
 print(models.test_models(X_train, Y_train, X_test, Y_test))
 
-#best_params = validation.grid_search_CV(LogisticRegression(), param_grid_lr, X_train, Y_train)
-# best params: {'C': 0.1, 'penalty': 'l2', 'solver': 'newton-cg'}
+# best_params = validation.grid_search_CV(LogisticRegression(), param_grid_lr, X_train, Y_train)
 
 selected_features = validation.feature_selection(X_train, Y_train, X_test, Y_test)
 
 # selected_features = validation.recursive_feat_elimCV(LogisticRegression(penalty='l2', solver='newton-cg', C=0.1, max_iter=1000), X_train, Y_train, X_test, Y_test)
-
 
 print("Training Model...")
 acc_A1_train = model_A1.train(X_train[selected_features], Y_train, X_test[selected_features], Y_test)
@@ -107,7 +96,7 @@ print("Test: ", acc_A1_test)
 # Task A2
 # feature selection probably important here
 
-model_A2 = A1(lr=True)
+model_A2 = A2(lr=True)
 print("Training Model...")
 acc_A2_train = model_A2.train(X_2train, Y_2train, X_2test, Y_2test)
 #acc_A2_test = model_A2.test()

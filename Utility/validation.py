@@ -12,6 +12,8 @@ from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val
 from Utility import models
 
 #====== To be moved =====
+# Feature selection, based on both chi2 and f_classif score functions. Wide range of score thresholds as well to decide
+# on best combination. Runs test on all basic models to decide best score funciton/threshold and features.
 def feature_selection(X_train, Y_train, X_test, Y_test, score_func=[chi2,f_classif], threshold=[0,0.5,1,1.5,2,2.5,2.8]):
     max_acc = 0
     best_features = []
@@ -40,6 +42,7 @@ def feature_selection(X_train, Y_train, X_test, Y_test, score_func=[chi2,f_class
 
     return best_features
 
+# Plots recursive feature elimination using rfecv_tool function
 def recursive_feat_elimCV(model, X_train, Y_train, X_test, Y_test):
     # Create the RFE object and compute a cross-validated score.
     rfecv, rfecv_features = rfecv_tool(model, X_train, Y_train, X_test, Y_test)
@@ -66,6 +69,7 @@ def rfecv_tool(estimator, X_train, Y_train, X_test, Y_test):
   plt.show()
   return rfecv, X_train.columns[rfecv.support_]
 
+# Cross validated grid search that allows us to search for the best parameters
 def grid_search_CV(model, param_grid, X_train, Y_train):
     print("Grid Search CV...")
     grid = GridSearchCV(model, param_grid, cv=5)
@@ -73,34 +77,3 @@ def grid_search_CV(model, param_grid, X_train, Y_train):
     print(grid.best_params_)
 
     return grid.best_params_
-
-# fs = SelectKBest(chi2, k='all')
-# fs.fit_transform(X_train, Y_train)
-# scores = pd.Series(fs.scores_, index = X_train.columns)
-# scores = scores.sort_values()
-# print(scores)
-#
-# features = list(scores[scores > 1].keys())
-# print(features)
-
-# apply feature selection
-
-#print(models.test_models(X_train[features], Y_train, X_test[features], Y_test))
-
-# print("Testing models...")
-#
-# model_tests = models.test_models(models.models, tr_X, tr_Y, te_X, te_Y)
-#
-# print(model_tests['Name'])
-# print(model_tests['Score'])
-
-#print(training_features)
-
-# normalizing tr_X and te_X with preprocessing.normalize(tr_X) reduced accuracy across the board
-
-# Model Validation Stuff
-
-
-
-#plots.plot_validation_curve(SVC(kernel='poly', degree=4), tr_X, tr_Y, "C", [0.001, 0.01, 0.1, 1])
-
