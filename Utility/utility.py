@@ -1,6 +1,6 @@
 # ======================================================================================================================
 # This file contains utility functions used to extract features/data from the dlib face detector
-# It also contains the global paths to the image dataset directory
+# It also contains the global paths to the image dataset directory. Adapted from lab.
 # ======================================================================================================================
 import os
 import numpy as np
@@ -124,7 +124,7 @@ def run_dlib_shape(image):
 
     return dlibout, resized_image
 
-def extract_features_labels(data_set):
+def extract_features_labels(data_set, smiles=False):
     """
     This function extracts the landmarks features for all images in the folder specified by 'data_set' parameter.
     It also extracts the gender label for each image.
@@ -143,8 +143,13 @@ def extract_features_labels(data_set):
     # strip lines of \n
     lines = [line.rstrip('\n') for line in labels_file]
 
+    print(lines)
     # dictionary of gender labels for each image
-    gender_labels = {line.split('\t')[0] : int(line.split('\t')[2]) for line in lines[1:]}
+    if smiles:
+        labels = {line.split('\t')[0]: int(line.split('\t')[3]) for line in lines[1:]}
+    else:
+        labels = {line.split('\t')[0] : int(line.split('\t')[2]) for line in lines[1:]}
+    print(labels)
 
     # progress bar
     printProgressBar(0, len(image_paths), prefix="Extracting features from: " + images_dir)
@@ -167,16 +172,16 @@ def extract_features_labels(data_set):
 
             if features is not None:
                 all_features.append(features)
-                all_labels.append(gender_labels[file_name])
+                all_labels.append(labels[file_name])
 
             printProgressBar(i + 1, len(image_paths), prefix="Extracting features from: " + images_dir)
 
     landmark_features = np.array(all_features)
-    gender_labels = (np.array(all_labels) + 1)/2 # simply converts the -1 into 0, so male=0 and female=1
+    labels = (np.array(all_labels) + 1)/2 # simply converts the -1 into 0, so male=0 and female=1
 
     txt = "Successfully extracted features from: {percent:.2f}% of images"
-    print(txt.format(percent=(len(gender_labels) / len(image_paths)) * 100))
+    print(txt.format(percent=(len(labels) / len(image_paths)) * 100))
 
-    return landmark_features, gender_labels
+    return landmark_features, labels
 
 
