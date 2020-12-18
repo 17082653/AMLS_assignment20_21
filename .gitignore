@@ -13,6 +13,7 @@ testing.ipynb
 
 # Python test file
 tests.py
+eye_extraction_test.py
 
 # numpy .npy files for saving intermediate files
 *.npy

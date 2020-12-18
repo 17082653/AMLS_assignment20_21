@@ -14,7 +14,7 @@ from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier,
 from sklearn.feature_selection import SelectKBest, chi2, RFECV, f_classif
 from sklearn.linear_model import LassoCV, RidgeCV, LogisticRegression,  SGDClassifier
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, learning_curve
-from sklearn.metrics import confusion_matrix, accuracy_score,  classification_report
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC, LinearSVC
@@ -58,16 +58,37 @@ from UtilityB import validationB
 
 # DATASET LOADING - TASK B
 
-tr_BX, te_BX, tr_BY, te_BY, tr2_BY, te2_BY = prepB.split_data_into_sets(utilB.cartoon_set, 'landmarksB.npy', 'eye_labels.npy', 'face_labels.npy', 0.8, 42)
+#tr_BX, te_BX, tr_BY, te_BY, tr2_BY, te2_BY = prepB.split_data_into_sets(utilB.cartoon_set, 'landmarksB.npy', 'eye_labels.npy', 'face_labels.npy', 0.8, 42)
 
-XB_train, YB_train = prepB.convert_to_dataframes(tr_BX, tr_BY)
-XB_test, YB_test = prepB.convert_to_dataframes(te_BX, te_BY)
-__, YB_2train = prepB.convert_to_dataframes(tr_BX, tr2_BY)
-__, YB_2test = prepB.convert_to_dataframes(tr_BX, te2_BY)
+#XB_train, YB_train = prepB.convert_to_dataframes(tr_BX, tr_BY)
+#XB_test, YB_test = prepB.convert_to_dataframes(te_BX, te_BY)
 
 # B1 - Training on just jaw?
 # XB_train = XB_train.iloc[:, 0:36]
 # XB_test = XB_test.iloc[:, 0:36]
+
+#eye_features, eye_labels = utilB.extract_eye_features(utilB.cartoon_set)
+#np.save('eye_feats.npy', eye_features)
+#np.save('eye_labelsB2.npy', eye_labels)
+
+eye_feats = np.load('eye_feats.npy')
+eye_labelsB2 = np.load('eye_labelsB2.npy')
+
+#XB2_train,XB2_test,YB2_train,YB2_test=train_test_split(XB2_train,YB2_train,test_size=0.3)
+
+for i in range(0,10):
+    print(eye_feats[i])
+    print(eye_labelsB2[i])
+
+XB2_train, YB2_train = prepB.convert_to_dataframes(eye_feats, eye_labelsB2)
+
+print(XB2_train)
+print(YB2_train)
+
+trX,teX,trY,teY=train_test_split(XB2_train,YB2_train,test_size=0.3)
+
+print(trX)
+print(trY)
 
 # ======================================================================================================================
 # Task A1 - Male or Female
@@ -125,7 +146,7 @@ print(acc_A2_train)
 # feature selection does good here
 
 
-print(models.test_models(XB_train, YB_train, XB_test, YB_test))
+#print(models.test_models(XB_train, YB_train, XB_test, YB_test))
 
 
 #selected_features = validationB.feature_selectionB(model_B1, XB_train, YB_train, XB_test, YB_test)
@@ -135,24 +156,27 @@ print(models.test_models(XB_train, YB_train, XB_test, YB_test))
 # 'Score': [0.27638804148871265, 0.28615009151921905, 0.32153752287980475, 0.3679072605247102, 0.3349603416717511, 0.35143380109823064, 0.2830994508846858, 0.3587553386211104, 0.3465527760829774, 0.3251982916412447]}
 
 
-model_B1 = B1()
-print("Training Model...")
-acc_B1_train = model_B1.train(XB_train, YB_train, XB_test, YB_test)
-#acc_B1_test = model_A1.test()
-print(acc_B1_train)
-#Clean up memory/GPU etc...
+# model_B1 = B1()
+# print("Training Model...")
+# acc_B1_train = model_B1.train(XB_train, YB_train, XB_test, YB_test)
+# #acc_B1_test = model_A1.test()
+# print(acc_B1_train)
+# #Clean up memory/GPU etc...
 
 # ======================================================================================================================
 # Task B2
 
-"""
-model_B2 = B2()
-acc_B2_train = model_B2.train()
-acc_B2_test = model_B2.test()
+#print(models.test_models(trX, trY, teX, teY))
+
+model_B2 = A1()
+acc_B2_train = model_B2.train(trX,trY,teX,teY)
+print(acc_B2_train )
+#acc_B2_test = model_B2.test()
 #Clean up memory/GPU etc...
 
 
 # ======================================================================================================================
+"""
 ## Print out your results with following format:
 acc_B1_test = 'none'
 acc_B2_test = 'none'

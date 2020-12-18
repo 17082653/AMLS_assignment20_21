@@ -12,8 +12,8 @@ target_size = None
 
 # file = ['0.png', '5.png', '10.png', '20.png', '30.png', '40.png', '94.png', '98.png', '140.png']
 # sunglasses, 4-black, 2-green, 2-green, sunglasses, 4-black, 1-blue, 0-brown, 3-gray
-file = ['5.png', '10.png', '20.png', '94.png', '98.png', '140.png']
-dic = {0:['98.png'], 1: ['94.png'], 2:['10.png', '20.png'], 3:['140.png'], 4:['5.png', '40.png']}
+#file = ['5.png', '10.png', '20.png', '94.png', '98.png', '140.png']
+dic = {0:['4.png'], 1: ['94.png'], 2:['10.png', '3.png'], 3:['140.png'], 4:['5.png', '40.png']}
 
 # define the list of boundaries
 # RGB
@@ -81,11 +81,10 @@ for color, file in dic.items():
         cv2.imshow("mask", np.hstack([crop_img, masked_image]))
         cv2.waitKey(0)
 
-        gray = cv2.cvtColor(masked_image, cv2.COLOR_BGR2GRAY)
-
+        #hsv = cv2.cvtColor(masked_image, cv2.COLOR_BGR2HSV)
 
         plt.figure()
-        plt.imshow(gray, cmap='gray')  #cv2.cvtColor(masked_image, cv2.COLOR_BGR2RGB)
+        plt.imshow(masked_image)  #cv2.cvtColor(masked_image, cv2.COLOR_BGR2RGB)
         plt.show()
 
 
