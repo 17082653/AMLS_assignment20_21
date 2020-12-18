@@ -12,13 +12,12 @@ from UtilityB import utilityB as utilB
 
 
 # The main function call which loads and splits data file into training and test
-def split_data_into_sets(dataset, X_file, Y_file, Y2_file, train_ratio, shuffle_int):
+def split_data_into_sets(dataset, X_file, Y_file, train_ratio, shuffle_int):
     # Calling data_prep
-    x, y, y2, feat_num = data_prep(dataset, X_file, Y_file, Y2_file,)
+    x, y, feat_num = data_prep(dataset, X_file, Y_file)
 
     # Calling sklearn train_test_split with a random_state which shuffles the data
     tr_X, te_X, tr_Y, te_Y = train_test_split(x, y, test_size=1 - train_ratio, random_state=shuffle_int)
-    __, __, tr2_Y, te2_Y = train_test_split(x, y2, test_size=1 - train_ratio, random_state=shuffle_int)
 
     # Reshaping the data into 2 dimensions
     tr_X = tr_X.reshape(len(tr_X), feat_num)
@@ -27,35 +26,31 @@ def split_data_into_sets(dataset, X_file, Y_file, Y2_file, train_ratio, shuffle_
     te_X = te_X.reshape(len(te_X), feat_num)
     te_Y = list(te_Y)
 
-    tr2_Y = list(tr2_Y)
-    te2_Y = list(te2_Y)
+    return tr_X, te_X, tr_Y, te_Y
 
-    return tr_X, te_X, tr_Y, te_Y, tr2_Y, te2_Y
-
-# Loads the data
-def data_prep(dataset, X_data, Y_data, Y2_data, forbidden_features=[]):
+# Loads the data and calls split_and_label
+def data_prep(dataset, X_data, Y_data, forbidden_features=[]):
     # Checks if data has already been loaded and saved, if yes, we do not do the lengthy extraction and save process
     if os.path.isfile(Y_data) == False:
-        save_data(dataset, X_data, Y_data, Y2_data)
+        save_data(dataset, X_data, Y_data)
 
     # Loads the data from files
-    x, y, y2 = load_data(X_data, Y_data, Y2_data)
+    x, y = load_data(X_data, Y_data)
 
     # Calls the split_and_label_features function, which allows us to decide which facial features we use
     x, feat_num = split_and_label_features(x, forbidden_features)
 
-    return x, y, y2, feat_num
+    return x, y, feat_num
 
-def save_data(dataset_dir, x_name, y_name, y2_name):
+def save_data(dataset_dir, x_name, y_name):
     # Function for saving dataset into npy files
-    landmark_features, eye_lables, face_shape_labels = utilB.extract_features_labelsB(dataset_dir)
+    landmark_features, gender_labels = utilB.extract_features_labelsB(dataset_dir)
     np.save(x_name, landmark_features)
-    np.save(y_name, eye_lables)
-    np.save(y2_name, face_shape_labels)
+    np.save(y_name, gender_labels)
 
-def load_data(file_x, file_y, file_y2):
+def load_data(file_x, file_y):
     # Function for loading dataset from npy files
-    return np.load(file_x), np.load(file_y), np.load(file_y2)
+    return np.load(file_x), np.load(file_y)
 
 def convert_to_dataframes(X, Y):
     X = pd.DataFrame(data=X)

@@ -37,20 +37,6 @@ predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 #     300 faces In-the-wild challenge: Database and results.
 #     Image and Vision Computing (IMAVIS), Special Issue on Facial Landmark Localisation "In-The-Wild". 2016.
 
-def get_data(data_set):
-    X, y = extract_features_labels(data_set)
-
-    # this line gives labels 2 columns, with opposite in second column??
-    Y = np.array([y, -(y - 1)]).T
-
-    # Make this normal, not 100 splits
-    tr_X = X[:100]
-    tr_Y = Y[:100]
-    te_X = X[100:]
-    te_Y = Y[100:]
-
-    return tr_X, tr_Y, te_X, te_Y
-
 def shape_to_np(shape, dtype="int"):
     # initialize the list of (x, y)-coordinates
     coords = np.zeros((shape.num_parts, 2), dtype=dtype)

@@ -1,17 +1,28 @@
-
+# ======================================================================================================================
+# Task B1 model class. Virtually identical to A1.
+# ======================================================================================================================
 import time
 from sklearn import svm
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import cross_val_score, validation_curve
+from sklearn.model_selection import cross_val_score
 
 class B1:
-    name = 'taskB1'
 
-    def __init__(self, kernel='linear'):
+    # The classifier object. Default parameters are not the ones used in the final result
+    # The LogisticRegressor with the best parameters found after validation was used. This is created when lr=True is
+    # passed to the constructor.
+    def __init__(self, c=0.1, kernel='poly', degree=4, lr=False):
+        self.c = c
         self.kernel = kernel
-        #kernel=self.kernel
-        self.classifier = svm.LinearSVC()
+        self.degree = degree
+        if lr:
+            # Best params: {'C': 0.1, 'penalty': 'l2', 'solver': 'newton-cg'}
+            self.classifier = LogisticRegression(penalty='l2', solver='newton-cg', C=0.1, max_iter=4000)
+        else:
+            # Best params: C=0.1, kernel='poly', degree=4
+            self.classifier = svm.SVC(C=self.c, kernel=self.kernel, degree=self.degree)
+
 
     def train(self, training_images, training_labels, test_images, test_labels):
         start = time.time()

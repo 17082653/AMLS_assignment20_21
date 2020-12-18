@@ -10,17 +10,19 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
+# Comment/Un-comment out models as required
 def test_models(X_train, y_train, X_test, y_test):
     models = []
     models.append(('KNN', KNeighborsClassifier()))
-    models.append(('SVC', SVC()))
-    models.append(('Linear SVC', LinearSVC()))
-    models.append(('SVC (Polynomial Kernel)', SVC(kernel='poly')))
-    models.append(('Log Reg', LogisticRegression()))
-    models.append(('My Log Reg', LogisticRegression(penalty='l2', solver='newton-cg', C=0.1, max_iter=1000)))
-    models.append(('Gaussian NB', GaussianNB()))
-    models.append(('Random Forest', RandomForestClassifier(n_estimators=100)))
-    models.append(('Gradient Boosting', GradientBoostingClassifier()))
+    #models.append(('SVC', SVC()))
+    #models.append(('Linear SVC', LinearSVC()))
+    #models.append(('SVC (Polynomial Kernel)', SVC(kernel='poly')))
+    #models.append(('Log Reg', LogisticRegression()))
+    models.append(('SVC (Polynomial Kernel) (Tuned)', SVC(C=0.1, kernel='poly', degree=4)))
+    models.append(('Log Reg (Tuned)', LogisticRegression(penalty='l2', solver='newton-cg', C=0.1, max_iter=10000)))
+    #models.append(('Gaussian NB', GaussianNB()))
+    #models.append(('Random Forest', RandomForestClassifier(n_estimators=100)))
+    #models.append(('Gradient Boosting', GradientBoostingClassifier()))
 
     names = []
     scores = []

@@ -7,7 +7,7 @@ import seaborn as sns
 from sklearn.model_selection import validation_curve
 from sklearn.metrics import confusion_matrix, accuracy_score,  classification_report
 
-
+# Plots a validation curve for a chosen parameter and parameter value range
 def plot_validation_curve(model, tr_X, tr_Y, param_name, param_range):
     train_scores, test_scores = validation_curve(
         model, tr_X, tr_Y, param_name=param_name, param_range=param_range,
@@ -55,7 +55,7 @@ def plot_validation_curve(model, tr_X, tr_Y, param_name, param_range):
 
     plt.show()
 
-
+# Plots classifer confusion matrix
 def check_classifier(pred, truth):
     s = classification_report(truth, pred, labels=[0, 1, 2])
     print(s)  #  prints classification report
@@ -71,3 +71,25 @@ def check_classifier(pred, truth):
     plt.ylabel('predicted label')
 
     return np.array(list(d.values()))
+
+# Plot feature selection results, call comes from validation.py
+def plot_feat_selection(x, y_dic):
+    for model, y_val in y_dic.items():
+        if len(y_val) != 0:
+            plt.plot(x, y_val, label=model)
+
+    plt.title('Test Accuracy of Models vs Num of Features (f_classif)')
+    plt.legend()
+    plt.show()
+
+    #
+    # # # display scatter plot data
+    # # plt.figure(figsize=(10, 8))
+    # # plt.title('Scatter Plot', fontsize=20)
+    # # plt.xlabel('x', fontsize=15)
+    # # plt.ylabel('y', fontsize=15)
+    # # plt.scatter(data["x"], data["y"], marker='o')
+    #
+    # # add labels
+    # for label, x, y in zip(data["label"], data["x"], data["y"]):
+    #     plt.annotate(label, xy=(x, y))

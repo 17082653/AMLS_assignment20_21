@@ -1,3 +1,6 @@
+# ======================================================================================================================
+# Task A2 model class. Virtually identical to class A1. Logistic regressor has a different default C value.
+# ======================================================================================================================
 import time
 from sklearn import svm
 from sklearn.linear_model import LogisticRegression
@@ -11,8 +14,8 @@ class A2:
         self.kernel = kernel
         self.degree = degree
         if lr:
-            # best params: {'C': 0.1, 'penalty': 'l2', 'solver': 'newton-cg'}
-            self.classifier = LogisticRegression(penalty='l2', solver='newton-cg', C=0.1, max_iter=1000)
+            # best params: {'C': 0.01, 'penalty': 'l2', 'solver': 'newton-cg'}
+            self.classifier = LogisticRegression(penalty='l2', solver='newton-cg', C=0.01, max_iter=1000)
         else:
             self.classifier = svm.SVC(C=self.c, kernel=self.kernel, degree=self.degree)
 

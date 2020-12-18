@@ -129,7 +129,7 @@ def eye_extractor(img, color):
 
     mean = cv2.mean(masked_image)
 
-    #print("color: ", color, "; mean: ", mean)
+    print("color: ", color, "; mean: ", mean)
 
     # 4th value is not important, so not returned
     return mean[:3]
@@ -193,7 +193,7 @@ def extract_features_labelsB(data_set):
     txt = "Successfully extracted features from: {percent:.2f}% of images"
     print(txt.format(percent=(len(eye_labels) / len(image_paths)) * 100))
 
-    return landmark_features, eye_labels, face_shape_labels
+    return landmark_features, face_shape_labels
 
 def extract_eye_features(data_set):
     """
