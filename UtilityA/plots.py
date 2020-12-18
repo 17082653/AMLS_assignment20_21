@@ -1,5 +1,5 @@
 #=======================================================================================================================
-# This file was used for plotting the figures in the report
+# This file was used for plotting the figures for Task A in the report
 # ======================================================================================================================
 import numpy as np
 import matplotlib.pyplot as plt

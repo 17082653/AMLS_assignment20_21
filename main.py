@@ -29,43 +29,54 @@ from A2.a2 import A2
 from B1.b1 import B1
 from B2.b2 import B2
 
-from Utility import pre_processing as prep
-from Utility import utility as util
-from Utility import models
-from Utility import validation
-from Utility import plots
+from UtilityA import pre_processing as prep
+from UtilityA import utility as util
+from UtilityA import models
+from UtilityA import validation
+from UtilityA import plots
+
+from UtilityB import pre_processingB as prepB
+from UtilityB import utilityB as utilB
+from UtilityB import validationB
+
 
 # ======================================================================================================================
 # Data Pre-processing
 # UNSEEN TEST DATA -  CELEBA/GENDERS
-landmarks_test, genders_test, __ = prep.data_prep(util.celeba_test_set, 'landmarks_test.npy', 'genders_test.npy')
-unseen_test_x, unseen_test_y = prep.convert_to_dataframes(landmarks_test, genders_test)
-
-# DATASET LOADING
-tr_X, te_X, tr_Y, te_Y = prep.split_data_into_sets(util.celeba_set, 'landmarks.npy', 'genders.npy', 0.8, 42)
-tr2_X, te2_X, tr2_Y, te2_Y = prep.split_data_into_sets(util.celeba_set, 'landmarks.npy', 'smiles.npy', 0.8, 42, True)
-
-X_train, Y_train = prep.convert_to_dataframes(tr_X, tr_Y)
-X_test, Y_test = prep.convert_to_dataframes(te_X, te_Y)
-
-X_2train, Y_2train = prep.convert_to_dataframes(tr2_X, tr2_Y)
-X_2test, Y_2test = prep.convert_to_dataframes(te2_X, te2_Y)
-
-# Destroys accuracy
-# scaler = preprocessing.MinMaxScaler()
-# X_train = pd.DataFrame(scaler.fit_transform(X_train), columns=X_train.columns)
-# X_test = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns)
+# landmarks_test, genders_test, __ = prep.data_prep(util.celeba_test_set, 'landmarks_test.npy', 'genders_test.npy')
+# unseen_test_x, unseen_test_y = prep.convert_to_dataframes(landmarks_test, genders_test)
 #
-# scaler = preprocessing.MinMaxScaler()
-# X_2train = pd.DataFrame(scaler.fit_transform(X_2train), columns=X_2train.columns)
-# X_2test = pd.DataFrame(scaler.transform(X_2test), columns=X_2test.columns)
+# # DATASET LOADING - TASK A
+# tr_X, te_X, tr_Y, te_Y = prep.split_data_into_sets(util.celeba_set, 'landmarks.npy', 'genders.npy', 0.8, 42)
+# tr2_X, te2_X, tr2_Y, te2_Y = prep.split_data_into_sets(util.celeba_set, 'landmarks.npy', 'smiles.npy', 0.8, 42, True)
+#
+# X_train, Y_train = prep.convert_to_dataframes(tr_X, tr_Y)
+# X_test, Y_test = prep.convert_to_dataframes(te_X, te_Y)
+#
+# X_2train, Y_2train = prep.convert_to_dataframes(tr2_X, tr2_Y)
+# X_2test, Y_2test = prep.convert_to_dataframes(te2_X, te2_Y)
+
+# DATASET LOADING - TASK B
+
+tr_BX, te_BX, tr_BY, te_BY, tr2_BY, te2_BY = prepB.split_data_into_sets(utilB.cartoon_set, 'landmarksB.npy', 'eye_labels.npy', 'face_labels.npy', 0.8, 42)
+
+XB_train, YB_train = prepB.convert_to_dataframes(tr_BX, tr_BY)
+XB_test, YB_test = prepB.convert_to_dataframes(te_BX, te_BY)
+__, YB_2train = prepB.convert_to_dataframes(tr_BX, tr2_BY)
+__, YB_2test = prepB.convert_to_dataframes(tr_BX, te2_BY)
+
+# B1 - Training on just jaw?
+# XB_train = XB_train.iloc[:, 0:36]
+# XB_test = XB_test.iloc[:, 0:36]
 
 # ======================================================================================================================
-# Task A1
+# Task A1 - Male or Female
+
 
 #model_A1 = A1(c=0.1, kernel='poly', degree=4)                  # Build model object.
 model_A1 = A1(lr=True)
 
+"""
 param_grid_SVC = {
     'C': [0.1, 0.5, 1, 10],
     'kernel' : ['poly'],
@@ -93,30 +104,48 @@ print("Training: ", acc_A1_train)
 print("Test: ", acc_A1_test)
 
 # ======================================================================================================================
-# Task A2
+# Task A2 - Smiling or Not Smiling
 # feature selection probably important here
 
 model_A2 = A2(lr=True)
 print("Training Model...")
-acc_A2_train = model_A2.train(X_2train, Y_2train, X_2test, Y_2test)
+
+selected_features_2 = validation.feature_selection(X_2train, Y_2train, X_2test, Y_2test)
+
+
+acc_A2_train = model_A2.train(X_2train[selected_features_2], Y_2train, X_2test[selected_features_2], Y_2test)
 #acc_A2_test = model_A2.test()
 print("Task A2 Complete")
 print(acc_A2_train)
 
 """
 # ======================================================================================================================
-# Task B1
+# Task B1 - Face Shapes
 # train my own facial predictor on cartoon set to get features?
+# feature selection does good here
+
+
+print(models.test_models(XB_train, YB_train, XB_test, YB_test))
+
+
+#selected_features = validationB.feature_selectionB(model_B1, XB_train, YB_train, XB_test, YB_test)
+
+# BASIC TEST
+# {'Name': ['KNN', 'SVC', 'Linear SVC', 'SVC (Polynomial Kernel)', 'Log Reg', 'My Log Reg', 'Gaussian NB', 'Random Forest', 'Gradient Boosting', 'Average'],
+# 'Score': [0.27638804148871265, 0.28615009151921905, 0.32153752287980475, 0.3679072605247102, 0.3349603416717511, 0.35143380109823064, 0.2830994508846858, 0.3587553386211104, 0.3465527760829774, 0.3251982916412447]}
+
 
 model_B1 = B1()
-acc_B1_train = model_B1.train()
-acc_B1_test = model_B1.test()
+print("Training Model...")
+acc_B1_train = model_B1.train(XB_train, YB_train, XB_test, YB_test)
+#acc_B1_test = model_A1.test()
+print(acc_B1_train)
 #Clean up memory/GPU etc...
-
 
 # ======================================================================================================================
 # Task B2
 
+"""
 model_B2 = B2()
 acc_B2_train = model_B2.train()
 acc_B2_test = model_B2.test()
@@ -134,4 +163,5 @@ print('TA1:{},{};TA2:{},{};TB1:{},{};TB2:{},{};'.format(acc_A1_train, acc_A1_tes
                                                         acc_A2_train, acc_A2_test,
                                                         acc_B1_train, acc_B1_test,
                                                         acc_B2_train, acc_B2_test))
+
 """

@@ -1,6 +1,6 @@
 # ======================================================================================================================
-# This file contains utility functions used to extract features/data from the dlib face detector
-# It also contains the global paths to the image dataset directory. Adapted from lab.
+# This file contains utility functions used to extract features/data from the dlib face detector for Task A.
+# It also contains the global paths to the celebA image dataset directory. Adapted from lab.
 # ======================================================================================================================
 import os
 import numpy as np
@@ -14,10 +14,7 @@ global basedir, image_paths, target_size
 basedir = './Datasets'
 
 celeba_set = os.path.join(basedir,'celeba')
-cartoon_set = os.path.join(basedir,'cartoon_set')
-
 celeba_test_set = os.path.join(basedir,'celeba_test')
-cartoon_test_set = os.path.join(basedir,'cartoon_set_test')
 
 labels_filename = 'labels.csv'
 images_dir = 'img'
@@ -127,10 +124,10 @@ def run_dlib_shape(image):
 def extract_features_labels(data_set, smiles=False):
     """
     This function extracts the landmarks features for all images in the folder specified by 'data_set' parameter.
-    It also extracts the gender label for each image.
+    It also extracts the gender label or smile label for each image.
     :return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
-        gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
+        labels:      an array containing the gender/smile label (male=0 and female=1) for each image in
                             which a face was detected
     """
 
@@ -143,13 +140,11 @@ def extract_features_labels(data_set, smiles=False):
     # strip lines of \n
     lines = [line.rstrip('\n') for line in labels_file]
 
-    print(lines)
     # dictionary of gender labels for each image
     if smiles:
         labels = {line.split('\t')[0]: int(line.split('\t')[3]) for line in lines[1:]}
     else:
         labels = {line.split('\t')[0] : int(line.split('\t')[2]) for line in lines[1:]}
-    print(labels)
 
     # progress bar
     printProgressBar(0, len(image_paths), prefix="Extracting features from: " + images_dir)
@@ -183,5 +178,3 @@ def extract_features_labels(data_set, smiles=False):
     print(txt.format(percent=(len(labels) / len(image_paths)) * 100))
 
     return landmark_features, labels
-
-

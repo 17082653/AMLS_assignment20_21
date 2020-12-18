@@ -9,9 +9,9 @@ from sklearn.linear_model import LassoCV, RidgeCV, LogisticRegression,  SGDClass
 from sklearn.feature_selection import SelectKBest, chi2, RFECV, f_classif, mutual_info_classif
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, learning_curve
 
-from Utility import models
+from UtilityA import models
 
-#====== To be moved =====
+#===========
 # Feature selection, based on both chi2 and f_classif score functions. Wide range of score thresholds as well to decide
 # on best combination. Runs test on all basic models to decide best score funciton/threshold and features.
 def feature_selection(X_train, Y_train, X_test, Y_test, score_func=[chi2,f_classif], threshold=[0,0.5,1,1.5,2,2.5,2.8]):

@@ -1,10 +1,14 @@
+# ======================================================================================================================
+# This file contains the code used to pre-process the data-sets. This means saving loading, converting to dataframes,
+# the ability to select which features to use, splitting into training/testing.
+# ======================================================================================================================
 import numpy as np
 import pandas as pd
 import os.path
 
 from sklearn.model_selection import train_test_split
 
-from Utility import utility as util
+from UtilityA import utility as util
 
 # The main function call which loads and splits data file into training and test
 def split_data_into_sets(dataset, X_file, Y_file, train_ratio, shuffle_int, smiles=False):
@@ -23,7 +27,7 @@ def split_data_into_sets(dataset, X_file, Y_file, train_ratio, shuffle_int, smil
 
     return tr_X, te_X, tr_Y, te_Y
 
-# Loads the data
+# Loads the data and calls split_and_label
 def data_prep(dataset, X_data, Y_data, smiles=False, forbidden_features=[]):
     # Checks if data has already been loaded and saved, if yes, we do not do the lengthy extraction and save process
     if os.path.isfile(Y_data) == False:
