@@ -99,7 +99,7 @@ param_grid_lr = {
     'C': [100, 10, 1.0, 0.1, 0.01]}
 
 # ======================================================================================================================
-"""
+
 # TASK A1 - Male or Female
 
 # BASIC TEST OF MODELS
@@ -109,7 +109,7 @@ param_grid_lr = {
 model_A1 = A1(lr=True)  #  Alternative is SVC:  model_A1 = A1(c=0.1, kernel='poly', degree=4)
 
 # FEATURE SELECTION
-print("Performing Feature Selection...")
+print("Performing Task A1 Feature Selection...")
 selected_features = validation.feature_selection(X_train, Y_train, X_test, Y_test)
 # Unused recursive_feat_elimination...
 # selected_features = validation.recursive_feat_elimCV(LogisticRegression(penalty='l2', solver='newton-cg', C=0.1, max_iter=1000), X_train, Y_train, X_test, Y_test)
@@ -122,12 +122,8 @@ acc_A1_train = model_A1.train(X_train[selected_features], Y_train, X_test[select
 acc_A1_test = model_A1.test(unseen_test_x[selected_features], unseen_test_y)
 print("Cross validated acc: ", np.average(cross_val_score(model_A1.classifier, X_train[selected_features], Y_train, cv=5)))
 
-print("Task A1 Complete")
-print("Training: ", acc_A1_train)
-print("Test: ", acc_A1_test)
-"""
 # ======================================================================================================================
-"""
+
 # TASK A2 - Smiling or Not Smiling
 model_A2 = A2(lr=True)
 
@@ -135,7 +131,7 @@ model_A2 = A2(lr=True)
 # best_params = validation.grid_search_CV(LogisticRegression(), param_grid_lr, X_2train, Y_2train)
 
 # FEATURE SELECTION
-print("Performing Feature Selection...")
+print("Performing Task A2 Feature Selection...")
 #selected_features_2 = validation.recursive_feat_elimCV(LogisticRegression(penalty='l2', solver='newton-cg', C=0.01, max_iter=1000), X_2train, Y_2train, X_2test, Y_2test)
 selected_features_2 = validation.feature_selection(X_2train, Y_2train, X_2test, Y_2test)
 
@@ -144,20 +140,17 @@ acc_A2_train = model_A2.train(X_2train[selected_features_2], Y_2train, X_2test[s
 acc_A2_test = model_A2.test(unseen_test_x2[selected_features_2], unseen_test_y2)
 print("Cross validated acc: ", np.average(cross_val_score(model_A2.classifier, X_2train[selected_features_2], Y_2train, cv=5)))
 
-print("Task A2 Complete")
-print("Training: ", acc_A2_train)
-print("Test: ", acc_A2_test)
-
-
-"""
 # ======================================================================================================================
-#Task B1 - Face Shapes
+
+# Task B1 - Face Shapes
 model_B1 = B1(lr=False)
 print("Training Task B1 Model...")
 acc_B1_train = model_B1.train(XB_train, YB_train, XB_test, YB_test)
 acc_B1_test = model_B1.test(cartoon_test_xB, cartoon_faces_test_yB)
+print("Cross validated acc: ", np.average(cross_val_score(model_B1.classifier, XB_train, YB_train, cv=5)))
 
 # ======================================================================================================================
+
 # Task B2 - 5 Types of Eye Colors
 
 # BASE MODEL TEST
@@ -167,14 +160,11 @@ model_B2 = B2()
 print("Training Task B2 Model...")
 acc_B2_train = model_B2.train(tr_B2X, tr_B2Y, te_B2X, te_B2Y)
 acc_B2_test = model_B2.test(XB2_unseen_test, YB2_unseen_test)
+print("Cross validated acc: ", np.average(cross_val_score(model_B2.classifier, tr_B2X, tr_B2Y, cv=5)))
 
 # ======================================================================================================================
 
 ## Print out your results with following format:
-acc_A1_train = 'none'
-acc_A1_test = 'none'
-acc_A2_train = 'none'
-acc_A2_test = 'none'
 print('TA1:{},{};TA2:{},{};TB1:{},{};TB2:{},{};'.format(acc_A1_train, acc_A1_test,
                                                         acc_A2_train, acc_A2_test,
                                                         acc_B1_train, acc_B1_test,
