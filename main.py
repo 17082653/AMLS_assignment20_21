@@ -1,19 +1,9 @@
 import os
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-from sklearn import preprocessing, svm
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, VotingClassifier
-from sklearn.feature_selection import SelectKBest, chi2, RFECV, f_classif
-from sklearn.linear_model import LassoCV, RidgeCV, LogisticRegression,  SGDClassifier
-from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, learning_curve
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
-from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC, LinearSVC
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split, cross_val_score
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -32,7 +22,6 @@ from UtilityA import plots
 from UtilityB import pre_processingB as prepB
 from UtilityB import utilityB as utilB
 from UtilityB import validationB
-
 
 # ======================================================================================================================
 # DATA LOADING/SAVING AND PRE-PROCESSING

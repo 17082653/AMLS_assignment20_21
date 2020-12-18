@@ -1,6 +1,6 @@
 # ======================================================================================================================
-# This file contains the code used to pre-process the data-sets. This means saving loading, converting to dataframes,
-# the ability to select which features to use, splitting into training/testing.
+# This file contains the code used to pre-process the data-sets in Task A. This means saving loading, converting to
+# dataframes, the ability to select which features to use, splitting into training/testing.
 # ======================================================================================================================
 import numpy as np
 import pandas as pd
